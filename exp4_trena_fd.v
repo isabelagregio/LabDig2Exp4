@@ -3,7 +3,6 @@ module exp4_trena_fd (
     input reset,
     input medir,
     input echo,
-    input [1:0] seletor,
     input partida_serial,
     input zera,
     input conta_ascii,
@@ -19,6 +18,7 @@ module exp4_trena_fd (
 
     wire [6:0] dados_ascii;
     wire [11:0] s_medida;
+    wire [1:0] seletor;
 
     assign medida = s_medida;
 
