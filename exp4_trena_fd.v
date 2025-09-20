@@ -5,6 +5,9 @@ module exp4_trena_fd (
     input echo,
     input [1:0] seletor,
     input partida_serial,
+    input zera,
+    input conta_ascii,
+    output fim_serial,
     output trigger,
     output saida_serial,
     output pronto_medida,
@@ -53,6 +56,19 @@ module exp4_trena_fd (
         .D0({3'b000, s_medida[3:0]} + 7'd30),
         .SEL(seletor),
         .MUX_OUT(dados_ascii)
+    );
+
+    contador_m #(
+        .M (4), 
+        .N (2)
+    ) conta_ascii (
+        .clock   (clock     ),
+        .zera_as (1'b0      ),
+        .zera_s  (zera ),
+        .conta   (conta_ascii),
+        .Q       (seletor), 
+        .fim     (fim_serial),  
+        .meio    (      )
     );
 
 endmodule; 
