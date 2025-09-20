@@ -52,4 +52,4 @@ module exp4_trena_fd #(
         .MUX_OUT(dados_ascii)
     );
 
-endomodule; 
+endmodule; 
