@@ -51,9 +51,9 @@ module exp4_trena_fd (
         .BITS(7)
     ) mux_inst (
         .D3(7'b0010111),
-        .D2({3'b000, s_medida[11:8]} + 7'h30),  
+        .D2({3'b000, s_medida[3:0]} + 7'h30),  
         .D1({3'b000, s_medida[7:4]} + 7'h30),   
-        .D0({3'b000, s_medida[3:0]} + 7'h30),
+        .D0({3'b000, s_medida[11:8]} + 7'h30),
         .SEL(seletor),
         .MUX_OUT(dados_ascii)
     );
