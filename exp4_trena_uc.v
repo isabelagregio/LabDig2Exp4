@@ -57,19 +57,13 @@ module exp4_trena_uc (
         endcase
 
         case (Eatual)
-            inicial:       db_estado = 4'b0000;
-            preparacao:    db_estado = 4'b0001;
-            mede           db_estado = 4'b0010;
-            envia_prim     db_estado = 4'b0011;
-            aguarda_prim   db_estado = 4'b0100;
-            envia_segu     db_estado = 4'b0101;
-            aguarda_seg    db_estado = 4'b0110;
-            envia_terc     db_estado = 4'b0111;
-            aguarda_terc   db_estado = 4'b1000;
-            envia_quart    db_estado = 4'b1001;
-            aguarda_quart  db_estado = 4'b1010;
-            final          db_estado = 4'b1011;
-            default:       db_estado = 4'b1111;
+          inicial          db_estado = 3'b000;
+          preparacao       db_estado = 3'b001;
+          mede             db_estado = 3'b010;
+          envia            db_estado = 3'b011;
+          aguarda          db_estado = 3'b100;
+          final            db_estado = 3'b101;
+          default:       db_estado = 4'b111;
         endcase
     end
 
