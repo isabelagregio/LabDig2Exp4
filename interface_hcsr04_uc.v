@@ -82,10 +82,7 @@ module interface_hcsr04_uc (
                 end
             final_medida: 
             begin
-                if (medir)
-                    Eprox = inicial;
-                else
-                    Eprox = final_medida;
+                Eprox = inicial;
             end
             default: 
                 Eprox = inicial;
@@ -97,7 +94,7 @@ module interface_hcsr04_uc (
         case (Eatual)
             preparacao: begin zera = 1'b1; pronto = 1'b0; end
             envia_trigger: begin gera = 1'b1; zera = 1'b0; end
-				espera_echo: gera = 1'b0;
+				    espera_echo: gera = 1'b0;
             medida: gera = 1'b0;
             armazenamento: registra = 1'b1;
             final_medida: begin registra = 1'b0; pronto = 1'b1; end

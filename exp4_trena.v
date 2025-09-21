@@ -45,7 +45,7 @@ module exp4_trena (
     .conta_ascii(conta_ascii),
     .zera(zera),
     .pronto(pronto),
-    .partida(partida_serial),
+    .partida_serial(partida_serial),
     .medir(medir),
     .db_estado(db_estado_bin) 
   );

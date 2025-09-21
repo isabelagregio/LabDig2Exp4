@@ -8,7 +8,7 @@ module exp4_trena_uc (
     output reg       conta_ascii,
     output reg       zera,
     output reg       pronto,
-    output reg       partida,
+    output reg       partida_serial,
     output reg       medir,
 
     output reg [2:0] db_estado 
@@ -21,9 +21,10 @@ module exp4_trena_uc (
     parameter inicial       = 3'b000;
     parameter preparacao    = 3'b001;
     parameter mede          = 3'b010;
-    parameter envia    = 3'b011;
-    parameter aguarda  = 3'b100;
-    parameter final         = 3'b101;
+    parameter envia         = 3'b011;
+    parameter aguarda       = 3'b100;
+    parameter conta         = 3'b101;
+    parameter final         = 3'b110;
 
     // Estado
     always @(posedge clock, posedge reset) begin
@@ -37,32 +38,33 @@ module exp4_trena_uc (
     always @(*) begin
         case (Eatual)
             inicial: Eprox = mensurar ? preparacao : inicial;
+            preparacao: Eprox = mede;
             mede: Eprox = pronto_medida ? envia : mede;
             envia: Eprox = aguarda;
-            aguarda: Eprox = pronto_transmissao ? (fim_serial ? final : envia) : aguarda;
+            aguarda: Eprox = pronto_transmissao ? (fim_serial ? final : conta) : aguarda;
+            conta: Eprox = envia;
             final: Eprox = mensurar ? preparacao : final;
             default: Eprox = inicial;
         endcase
     end
 
     // Saídas de controle
+    assign zera        = (Eatual == preparacao) | (Eatual == inicial);
+    assign medir       = (Eatual == preparacao);
+    assign conta_ascii = (Eatual == conta);
+    assign partida_serial  = (Eatual == envia);
+    assign pronto      = (Eatual == final);
+
+    // Lógica para o display do estado atual (apenas para simulação/depuração)
     always @(*) begin
         case (Eatual)
-            zera   =  (Eatual == preparacao || Eatual == inicial) ? 1'b1 : 1'b0;
-            medir  =  (Eatual == mede) ? 1'b1 : 1'b0;
-            conta_ascii = (Eatual == envia) ? 1'b1 : 1'b0;
-            partida = (Eatual == envia_prim || Eatual == envia_segu || Eatual == envia_terc || Eatual == envia_quart) ? 1'b1 : 1'b0;
-            pronto = (Eatual == final) ? 1'b1 : 1'b0;
-            default:    zera = 1'b0;
-        endcase
-
-        case (Eatual)
-          inicial          db_estado = 3'b000;
-          preparacao       db_estado = 3'b001;
-          mede             db_estado = 3'b010;
-          envia            db_estado = 3'b011;
-          aguarda          db_estado = 3'b100;
-          final            db_estado = 3'b101;
+          inicial:          db_estado = 3'b000;
+          preparacao:       db_estado = 3'b001;
+          mede:             db_estado = 3'b010;
+          envia:            db_estado = 3'b011;
+          aguarda:          db_estado = 3'b100;
+          conta:            db_estado = 3'b101;
+          final:            db_estado = 3'b110;
           default:       db_estado = 4'b111;
         endcase
     end
