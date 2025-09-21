@@ -25,7 +25,7 @@ module exp4_trena_fd (
     tx_serial_7E1 tx_serial (
        .clock(clock),
        .reset(reset),
-       .partida(partida), 
+       .partida(partida_serial), 
        .dados_ascii(dados_ascii),
        .saida_serial(saida_serial), 
        .pronto(pronto_transmissao),
@@ -61,7 +61,7 @@ module exp4_trena_fd (
     contador_m #(
         .M (4), 
         .N (2)
-    ) conta_ascii (
+    ) contador_ascii (
         .clock   (clock     ),
         .zera_as (1'b0      ),
         .zera_s  (zera ),
