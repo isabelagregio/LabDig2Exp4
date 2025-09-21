@@ -57,7 +57,7 @@ module exp4_trena_fd (
         .SEL(seletor),
         .MUX_OUT(dados_ascii)
     );
-
+  
     contador_m #(
         .M (4), 
         .N (2)
@@ -72,3 +72,4 @@ module exp4_trena_fd (
     );
 
 endmodule; 
+
