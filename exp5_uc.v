@@ -1,17 +1,17 @@
 module exp5_uc (
     input wire       clock,
     input wire       reset,
-    input wire       parar,
+    input wire       ligar,
     input wire       pronto_medida,
     input wire       pronto_transmissao,
     input wire       fim_serial,
-	 input wire 		um_segundo,
+	input wire 		 dois_segundos,
     output           conta_ascii,
+    output           conta_angulo,
     output           zera,
     output           pronto,
     output           partida_serial,
     output           medir,
-
     output reg [2:0] db_estado 
 );
 
@@ -39,16 +39,13 @@ module exp5_uc (
     always @(*) begin
         case (Eatual)
             inicial: Eprox = preparacao;
-				
-				
             preparacao: Eprox = mede;
             mede: Eprox = pronto_medida ? envia : mede;
             envia: Eprox = aguarda;
             aguarda: Eprox = pronto_transmissao ? (fim_serial ? final : conta) : aguarda;
             conta: Eprox = envia;
-				
-            final: Eprox = um_segundo ? (parar ? final : preparacao) : final;
-
+            gira: Eprox = preparacao;
+            final: Eprox = dois_segundos ? (parar ? final : gira) : final;
             default: Eprox = inicial;
         endcase
     end
@@ -57,6 +54,7 @@ module exp5_uc (
     assign zera        = (Eatual == preparacao) | (Eatual == inicial);
     assign medir       = (Eatual == preparacao);
     assign conta_ascii = (Eatual == conta);
+    assign conta_angulo = (Eatual == gira);
     assign partida_serial  = (Eatual == envia);
     assign pronto      = (Eatual == final);
 
@@ -69,7 +67,8 @@ module exp5_uc (
           envia:            db_estado = 3'b011;
           aguarda:          db_estado = 3'b100;
           conta:            db_estado = 3'b101;
-          final:            db_estado = 3'b110;
+          gira              db_estado = 3'b110;
+          final:            db_estado = 3'b111;
           default:       db_estado = 3'b111;
         endcase
     end

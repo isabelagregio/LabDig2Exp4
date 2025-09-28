@@ -1,20 +1,14 @@
 module exp5 (
     input clock,
     input reset,
-    input parar,
+    input ligar,
     input echo,
     output trigger,
+    output pwm, 
     output saida_serial,
-    output [6:0] medida0,
-    output [6:0] medida1,
-    output [6:0] medida2,
-    output pronto,
-    output [6:0] db_estado,
-    output db_echo,
-    output db_trigger
+    output fim_posicao
 );
 
-//código do desafio
 
   wire medir, partida_serial, pronto_medida, pronto_transmissao, um_segundo;
   wire [1:0] seletor;
@@ -25,7 +19,7 @@ module exp5 (
   assign db_trigger = trigger;
 
   
-  exp4_desafio_fd FD (
+  exp5_fd FD (
     .clock(clock),
     .reset(reset),
     .medir(medir),
@@ -33,31 +27,37 @@ module exp5 (
     .partida_serial(partida_serial),
     .trigger(trigger),
     .conta_ascii(conta_ascii),
+    .conta_angulo(conta_angulo),
     .zera(zera),
     .fim_serial(fim_serial),
     .saida_serial(saida_serial),
     .pronto_medida(pronto_medida),
     .pronto_transmissao(pronto_transmissao),
     .medida(medida),
+    .pwm(pwm),
+    .fim_posicao(fim_posicao),
+    .dp_posicao(),
+    .db_pwm(),
     .db_estado_medida(),
     .db_estado_serial(),
-	 .um_segundo(um_segundo)
-);
+	  .dois_segundos(dois_segundos)
+  );
 
-  exp4_desafio_uc UC (
+  exp5_uc UC (
     .clock(clock),
     .reset(reset),
-    .parar(parar),
+    .ligar(ligar),
     .pronto_medida(pronto_medida),
     .pronto_transmissao(pronto_transmissao),
     .fim_serial(fim_serial),
     .conta_ascii(conta_ascii),
+    .conta_angulo(conta_angulo),
     .zera(zera),
     .pronto(pronto),
     .partida_serial(partida_serial),
     .medir(medir),
     .db_estado(db_estado_bin),
-	 .um_segundo(um_segundo)
+	 .dois_segundos(dois_segundos)
   );
 
 
@@ -65,8 +65,6 @@ module exp5 (
       .hexa   (db_estado_bin), 
       .display(db_estado)
   );
-
-
   hexa7seg H0 (
       .hexa   (medida[3:0]), 
       .display(medida0         )
