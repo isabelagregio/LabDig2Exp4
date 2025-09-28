@@ -1,7 +1,7 @@
-module exp4_trena (
+module exp5 (
     input clock,
     input reset,
-    input mensurar,
+    input parar,
     input echo,
     output trigger,
     output saida_serial,
@@ -9,15 +9,23 @@ module exp4_trena (
     output [6:0] medida1,
     output [6:0] medida2,
     output pronto,
-    output [6:0] db_estado
+    output [6:0] db_estado,
+    output db_echo,
+    output db_trigger
 );
 
-  wire medir, partida_serial, pronto_medida, pronto_transmissao;
+//código do desafio
+
+  wire medir, partida_serial, pronto_medida, pronto_transmissao, um_segundo;
   wire [1:0] seletor;
   wire [11:0] medida;
   wire [3:0] db_estado_bin;
+  
+  assign db_echo = echo;
+  assign db_trigger = trigger;
 
-  exp4_trena_fd FD (
+  
+  exp4_desafio_fd FD (
     .clock(clock),
     .reset(reset),
     .medir(medir),
@@ -32,13 +40,14 @@ module exp4_trena (
     .pronto_transmissao(pronto_transmissao),
     .medida(medida),
     .db_estado_medida(),
-    .db_estado_serial()
+    .db_estado_serial(),
+	 .um_segundo(um_segundo)
 );
 
-  exp4_trena_uc UC (
+  exp4_desafio_uc UC (
     .clock(clock),
     .reset(reset),
-    .mensurar(mensurar),
+    .parar(parar),
     .pronto_medida(pronto_medida),
     .pronto_transmissao(pronto_transmissao),
     .fim_serial(fim_serial),
@@ -47,7 +56,8 @@ module exp4_trena (
     .pronto(pronto),
     .partida_serial(partida_serial),
     .medir(medir),
-    .db_estado(db_estado_bin) 
+    .db_estado(db_estado_bin),
+	 .um_segundo(um_segundo)
   );
 
 

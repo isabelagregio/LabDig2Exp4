@@ -1,4 +1,4 @@
-module exp4_trena_fd (
+module exp5_fd (
     input clock,
     input reset,
     input medir,
@@ -13,14 +13,16 @@ module exp4_trena_fd (
     output pronto_transmissao,
     output [11:0] medida,
     output [6:0] db_estado_medida,
-    output [6:0] db_estado_serial
+    output [6:0] db_estado_serial,
+	 output um_segundo
 );
 
     wire [6:0] dados_ascii;
     wire [11:0] s_medida;
     wire [1:0] seletor;
-
-    assign medida = s_medida;
+	 wire fim_segundo;
+    
+	 assign medida = s_medida;
 
     tx_serial_7E1 tx_serial (
        .clock(clock),
@@ -50,7 +52,7 @@ module exp4_trena_fd (
      mux_4x1_n #(
         .BITS(7)
     ) mux_inst (
-        .D3(7'b0010111),
+        .D3(7'h23),
         .D2({3'b000, s_medida[3:0]} + 7'h30),  
         .D1({3'b000, s_medida[7:4]} + 7'h30),   
         .D0({3'b000, s_medida[11:8]} + 7'h30),
@@ -71,4 +73,30 @@ module exp4_trena_fd (
         .meio    (      )
     );
 
+	   
+    contador_m #(
+        .M (50_000_000), 
+        .N (26)
+    ) contador_segundo (
+        .clock   (clock     ),
+        .zera_as (1'b0      ),
+        .zera_s  (zera ),
+        .conta   (1'b1),
+        .Q       (), 
+        .fim     (fim_segundo),  
+        .meio    (      )
+    );
+	 
+	 
+	  registrador_n #(
+        .N(1)
+    ) segundo (
+        .clock  (clock    ),
+        .clear  (zera),
+        .enable (fim_segundo),
+        .D      (fim_segundo),
+        .Q      (um_segundo)
+    );
+	 
+	 
 endmodule

@@ -28,12 +28,10 @@ module tx_serial_7E1 (
     output       db_tick         ,
     output       db_partida      ,
     output       db_saida_serial ,
-    output [6:0] db_estado       
+    // output [6:0] db_estado       
 );
  
     wire       s_reset        ;
-    wire       s_partida      ;
-    wire       s_partida_ed   ;
     wire       s_zera         ;
     wire       s_conta        ;
     wire       s_carrega      ;
@@ -41,11 +39,10 @@ module tx_serial_7E1 (
     wire       s_tick         ;
     wire       s_fim          ;
     wire       s_saida_serial ;
-    wire [3:0] s_estado       ;
+    // wire [3:0] s_estado       ;
 
 	 // sinais reset e partida (ativos em alto - GPIO)
     assign s_reset   = reset;
-    assign s_partida = partida;
 	 
     // fluxo de dados
     tx_serial_7E1_fd U1_FD (
@@ -65,7 +62,7 @@ module tx_serial_7E1 (
     tx_serial_uc U2_UC (
         .clock     ( clock        ),
         .reset     ( s_reset      ),
-        .partida   ( s_partida_ed ),
+        .partida   ( partida      ),
         .tick      ( s_tick       ),
         .fim       ( s_fim        ),
         .zera      ( s_zera       ),
@@ -73,7 +70,7 @@ module tx_serial_7E1 (
         .carrega   ( s_carrega    ),
         .desloca   ( s_desloca    ),
         .pronto    ( pronto       ),
-        .db_estado ( s_estado     )
+        .db_estado (      )
     );
 
     // gerador de tick
@@ -93,13 +90,13 @@ module tx_serial_7E1 (
     );
 
 
-    // detetor de borda para tratar pulsos largos
-    edge_detector U4_ED (
-        .clock ( clock        ),
-        .reset ( reset        ),
-        .sinal ( s_partida    ),
-        .pulso ( s_partida_ed )
-    );
+    // // detetor de borda para tratar pulsos largos
+    // edge_detector U4_ED (
+    //     .clock ( clock        ),
+    //     .reset ( reset        ),
+    //     .sinal ( s_partida    ),
+    //     .pulso ( s_partida_ed )
+    // );
 
 
     // saida serial
@@ -108,13 +105,13 @@ module tx_serial_7E1 (
     // depuracao
     assign db_clock        = clock;
     assign db_tick         = s_tick;
-    assign db_partida      = s_partida;
+    assign db_partida      = partida;
     assign db_saida_serial = s_saida_serial;
 
     // hexa0
-    hexa7seg HEX0 ( 
-        .hexa    ( s_estado  ), 
-        .display ( db_estado )
-    );
+    // hexa7seg HEX0 ( 
+    //     .hexa    ( s_estado  ), 
+    //     .display ( db_estado )
+    // );
   
 endmodule
