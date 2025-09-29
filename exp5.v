@@ -12,7 +12,8 @@ module exp5 #(
 );
 
 
-  wire medir, partida_serial, pronto_medida, pronto_transmissao, um_segundo, timeout_echo, conta_timeout_echo;
+  wire medir, partida_serial, pronto_medida, pronto_transmissao, um_segundo, timeout_echo, conta_timeout_echo, conta_angulo, conta_ascii;
+  wire zera_timeout_echo,reset_circuito, fim_serial;
   wire [1:0] seletor;
   wire [11:0] medida;
   wire [3:0] db_estado_bin;
@@ -32,7 +33,8 @@ module exp5 #(
     .trigger(trigger),
     .conta_ascii(conta_ascii),
     .conta_angulo(conta_angulo),
-    .zera(zera),
+    .zera_timeout_echo(zera_timeout_echo),
+    .reset_circuito(reset_circuito),
     .conta_timeout_echo(conta_timeout_echo),
     .fim_serial(fim_serial),
     .saida_serial(saida_serial),
@@ -58,7 +60,8 @@ module exp5 #(
     .fim_serial(fim_serial),
     .conta_ascii(conta_ascii),
     .conta_angulo(conta_angulo),
-    .zera(zera),
+    .zera_timeout_echo(zera_timeout_echo),
+    .reset_circuito(reset_circuito),
     .partida_serial(partida_serial),
     .medir(medir),
     .db_estado(db_estado_bin),

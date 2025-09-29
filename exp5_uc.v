@@ -9,7 +9,8 @@ module exp5_uc (
 		 input wire       timeout_echo,
 		 output           conta_ascii,
 		 output           conta_angulo,
-		 output           zera,
+		 output           zera_timeout_echo,
+         output           reset_circuito,
 		 output           partida_serial,
 		 output           medir,
 		 output           conta_timeout_echo,
@@ -22,12 +23,12 @@ module exp5_uc (
 
     // Parâmetros para os estados
     parameter inicial       								= 3'd0;
-    parameter envia_trigger_medida    					= 3'd1;
+    parameter envia_trigger_medida    					    = 3'd1;
     parameter aguarda_medida 								= 3'd2;
-    parameter inicia_transmissao_serial         	= 3'd3;
+    parameter inicia_transmissao_serial         	        = 3'd3;
     parameter transmite     								= 3'd4;
     parameter conta         								= 3'd5;
-	 parameter gira 			 								= 3'd6;
+	 parameter gira 			 						    = 3'd6;
     parameter final         								= 3'd7;
 
     // Estado
@@ -54,13 +55,14 @@ module exp5_uc (
     end
 
     // Saídas de controle
-    assign zera        = (Eatual == envia_trigger_medida) | (Eatual == inicial);
-    assign medir       = (Eatual == envia_trigger_medida);
-    assign conta_timeout_echo = (Eatual == aguarda_medida);
-    assign conta_ascii = (Eatual == conta);
-    assign conta_angulo = (Eatual == gira);
-	 assign fim_posicao  = (Eatual == final);
-    assign partida_serial  = (Eatual == inicia_transmissao_serial);
+    assign zera_timeout_echo                = (Eatual == envia_trigger_medida) | (Eatual == inicial);
+    assign reset_circuito               = (Eatual == inicial);
+    assign medir                        = (Eatual == envia_trigger_medida);
+    assign conta_timeout_echo           = (Eatual == aguarda_medida);
+    assign conta_ascii                  = (Eatual == conta);
+    assign conta_angulo                 = (Eatual == gira);
+	 assign fim_posicao                 = (Eatual == final);
+    assign partida_serial               = (Eatual == inicia_transmissao_serial);
 
     // Lógica para o display do estado atual (apenas para simulação/depuração)
     always @(*) begin

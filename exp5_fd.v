@@ -6,7 +6,8 @@ module exp5_fd #(
     input medir,
     input echo,
     input partida_serial,
-    input zera,
+    input zera_timeout_echo,
+    input reset_circuito,
     input conta_ascii,
     input conta_angulo,
     input conta_timeout_echo,
@@ -29,7 +30,7 @@ module exp5_fd #(
     wire [11:0] s_medida;
     wire [23:0] saida_rom;
     wire [1:0] seletor;
-	wire fim_dois_segundos;
+    wire [2:0] posicao_angulo;
     
 	assign medida = s_medida;
 
@@ -93,7 +94,7 @@ module exp5_fd #(
     ) contador_ascii (
         .clock   (clock     ),
         .zera_as (1'b0      ),
-        .zera_s  (zera ),
+        .zera_s  (reset_circuito ),
         .conta   (conta_ascii),
         .Q       (seletor), 
         .fim     (fim_serial),  
@@ -106,7 +107,7 @@ module exp5_fd #(
     ) contador_angulos (
         .clock   (clock     ),
         .zera_as (1'b0      ),
-        .zera_s  (zera ),
+        .zera_s  (reset_circuito ),
         .conta   (conta_angulo),
         .Q       (posicao_angulo), 
         .fim     (),  
@@ -120,35 +121,24 @@ module exp5_fd #(
     ) contador_segundo (
         .clock   (clock     ),
         .zera_as (1'b0      ),
-        .zera_s  (zera ),
+        .zera_s  (reset_circuito ),
         .conta   (1'b1),
         .Q       (), 
-        .fim     (fim_dois_segundos),  
+        .fim     (dois_segundos),  
         .meio    (      )
     );
 
     contador_m #(   // timer de 200 milisegundos
-        .M (TIME), 
+        .M (10_000_000), 
         .N (24)
     ) contador_timeout_echo (
         .clock   (clock     ),
         .zera_as (1'b0      ),
-        .zera_s  (zera ),
+        .zera_s  (zera_timeout_echo ),
         .conta   (conta_timeout_echo),
         .Q       (), 
         .fim     (timeout_echo),  
         .meio    (      )
-    );
-	 
-	 
-	registrador_n #(
-        .N(1)
-    ) segundo (
-        .clock  (clock    ),
-        .clear  (zera),
-        .enable (fim_dois_segundos),
-        .D      (fim_dois_segundos),
-        .Q      (dois_segundos)
     );
 	 
 	 
