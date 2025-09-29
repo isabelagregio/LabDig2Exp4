@@ -40,6 +40,7 @@ module exp5 #(
     .pronto_transmissao(pronto_transmissao),
     .medida(medida),
     .pwm(pwm),
+    .fim_posicao(fim_posicao),
     .timeout_echo(timeout_echo),
     .dp_posicao(),
     .db_pwm(),
@@ -62,7 +63,6 @@ module exp5 #(
     .partida_serial(partida_serial),
     .medir(medir),
     .db_estado(db_estado_bin),
-    .fim_posicao(fim_posicao),
 	.dois_segundos(dois_segundos), 
     .conta_timeout_echo(conta_timeout_echo)
   );

@@ -18,7 +18,6 @@ module exp5_fd #(
     output [11:0] medida,
     output pwm,
     output timeout_echo,
-    output fim_posicao,
     output [2:0] dp_posicao,
     output db_pwm,
     output [6:0] db_estado_medida,
@@ -62,7 +61,7 @@ module exp5_fd #(
     controle_servo_8 controle_servo (
         .clock(clock),
         .reset(reset),
-        .posicao(posicao),
+        .posicao(posicao_angulo),
         .controle(pwm), // pwm ligado no servomotor
         .db_controle(db_pwm), // pwm gerado pra depuração
         .db_posicao(dp_posicao)
@@ -84,7 +83,7 @@ module exp5_fd #(
     );
 
     rom_angulos_8x24 rom (
-        .endereco(endereco_rom), 
+        .endereco(posicao_angulo), 
         .saida(saida_rom)
     );
   
@@ -109,8 +108,8 @@ module exp5_fd #(
         .zera_as (1'b0      ),
         .zera_s  (zera ),
         .conta   (conta_angulo),
-        .Q       (posicao), 
-        .fim     (fim_posicao),  
+        .Q       (posicao_angulo), 
+        .fim     (),  
         .meio    (      )
     );
 
@@ -129,7 +128,7 @@ module exp5_fd #(
     );
 
     contador_m #(   // timer de 200 milisegundos
-        .M (10_000_000), 
+        .M (TIME), 
         .N (24)
     ) contador_timeout_echo (
         .clock   (clock     ),

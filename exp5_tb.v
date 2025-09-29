@@ -8,7 +8,7 @@ module exp5_tb;
     reg         reset_in = 0;
     reg         ligar = 0;
     reg         echo_in = 0;
-    wire        trigger_out, saida_serial_out, pronto_out, pwm, fim_posicao;
+    wire        trigger_out, saida_serial_out, fim_posicao_out, pwm_out;
 
     // Componente a ser testado (Device Under Test -- DUT)
     exp5 #(
@@ -19,9 +19,9 @@ module exp5_tb;
         .ligar(ligar),
         .echo(echo_in),
         .trigger(trigger_out),
-        .pwm(pwm),
+        .pwm(pwm_out),
         .saida_serial(saida_serial_out),
-        .fim_posicao(fim_posicao)
+        .fim_posicao(fim_posicao_out)
     );
 
     // Configurações do clock
@@ -83,7 +83,7 @@ module exp5_tb;
             echo_in = 0;
 
             // 5) Espera final da medida
-            wait (fim_posicao == 1'b1);
+            wait (fim_posicao_out == 1'b1);
             $display("Fim do caso %0d", caso);
 
             // 6) Espera entre casos de teste

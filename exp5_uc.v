@@ -13,6 +13,7 @@ module exp5_uc (
 		 output           partida_serial,
 		 output           medir,
 		 output           conta_timeout_echo,
+		 output 				fim_posicao,
 		 output reg [2:0] db_estado 
 );
 
@@ -58,6 +59,7 @@ module exp5_uc (
     assign conta_timeout_echo = (Eatual == aguarda_medida);
     assign conta_ascii = (Eatual == conta);
     assign conta_angulo = (Eatual == gira);
+	 assign fim_posicao  = (Eatual == final);
     assign partida_serial  = (Eatual == inicia_transmissao_serial);
 
     // Lógica para o display do estado atual (apenas para simulação/depuração)
@@ -66,7 +68,7 @@ module exp5_uc (
           inicial:          				db_estado = inicial;
           envia_trigger_medida:       	db_estado = envia_trigger_medida;
           aguarda_medida:   				db_estado = aguarda_medida;
-          inicia_transmissao_serial:   db_estado = inicia_transmissao_serial;
+          inicia_transmissao_serial:            	db_estado = inicia_transmissao_serial;
           transmite:        				db_estado = transmite;
           conta:            				db_estado = conta;
           gira:             				db_estado = gira;
