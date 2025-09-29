@@ -21,7 +21,13 @@ module exp5_tb;
         .trigger(trigger_out),
         .pwm(pwm_out),
         .saida_serial(saida_serial_out),
-        .fim_posicao(fim_posicao_out)
+        .fim_posicao(fim_posicao_out),
+        .display0(),
+        .display1(),
+        .display2(),
+        .display3(),
+        .display4(),
+        .display5()
     );
 
     // Configurações do clock

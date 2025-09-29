@@ -28,7 +28,7 @@ module tx_serial_7E1 (
     output       db_tick         ,
     output       db_partida      ,
     output       db_saida_serial, 
-    output [6:0] db_estado       
+    output [3:0] db_estado       
 );
  
     wire       s_reset        ;
@@ -70,7 +70,7 @@ module tx_serial_7E1 (
         .carrega   ( s_carrega    ),
         .desloca   ( s_desloca    ),
         .pronto    ( pronto       ),
-        .db_estado (      )
+        .db_estado ( db_estado     )
     );
 
     // gerador de tick

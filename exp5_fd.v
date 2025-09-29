@@ -20,10 +20,16 @@ module exp5_fd #(
     output [11:0] medida,
     output pwm,
     output timeout_echo,
-    output [2:0] dp_posicao,
+    output [2:0] db_posicao,
     output db_pwm,
-    output [6:0] db_estado_medida,
-    output [6:0] db_estado_serial,
+    output [3:0] db_estado_medida,
+    output [3:0] db_estado_serial,
+    output db_partida_serial,
+    output db_conta_ascii,
+    output db_conta_timeout_echo,
+    output db_conta_angulo,
+    output db_pronto_medida,
+    output db_pronto_transmissao,
 	output dois_segundos
 );
 
@@ -66,7 +72,7 @@ module exp5_fd #(
         .posicao(posicao_angulo),
         .controle(pwm), // pwm ligado no servomotor
         .db_controle(db_pwm), // pwm gerado pra depuração
-        .db_posicao(dp_posicao)
+        .db_posicao(db_posicao)
     );
 
      mux_8x1_n #(
