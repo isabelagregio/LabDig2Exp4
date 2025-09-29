@@ -1,4 +1,6 @@
-module exp5 (
+module exp5 #(
+    parameter TIME = 100_000_000
+) (
     input clock,
     input reset,
     input ligar,
@@ -19,7 +21,9 @@ module exp5 (
   assign db_trigger = trigger;
 
   
-  exp5_fd FD (
+  exp5_fd  #(
+        .TIME(TIME)
+    )  FD (
     .clock(clock),
     .reset(reset),
     .medir(medir),
@@ -60,7 +64,7 @@ module exp5 (
     .medir(medir),
     .db_estado(db_estado_bin),
 	.dois_segundos(dois_segundos), 
-    .conta_timeout_echo(conta_timeout_echo),
+    .conta_timeout_echo(conta_timeout_echo)
   );
 
 

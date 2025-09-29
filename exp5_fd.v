@@ -1,4 +1,6 @@
-module exp5_fd (
+module exp5_fd #(
+    parameter TIME = 100_000_000
+) (
     input clock,
     input reset,
     input medir,
@@ -114,7 +116,7 @@ module exp5_fd (
 
 	   
     contador_m #(   // timer de 2 segundos
-        .M (100_000_000), 
+        .M (TIME), 
         .N (27)
     ) contador_segundo (
         .clock   (clock     ),
