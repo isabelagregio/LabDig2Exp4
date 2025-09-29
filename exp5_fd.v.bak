@@ -1,14 +1,10 @@
-module exp5_fd #(
-    parameter TIME = 100_000_000
-) (
+module exp5_fd (
     input clock,
     input reset,
     input medir,
     input echo,
     input partida_serial,
-    input zera_timeout_echo,
-    input zera_contador_ascii,
-    input reset_circuito,
+    input zera,
     input conta_ascii,
     input conta_angulo,
     input conta_timeout_echo,
@@ -20,24 +16,19 @@ module exp5_fd #(
     output [11:0] medida,
     output pwm,
     output timeout_echo,
-    output [2:0] db_posicao,
+    output fim_posicao,
+    output [2:0] dp_posicao,
     output db_pwm,
-    output [3:0] db_estado_medida,
-    output [3:0] db_estado_serial,
-    output db_partida_serial,
-    output db_conta_ascii,
-    output db_conta_timeout_echo,
-    output db_conta_angulo,
-    output db_pronto_medida,
-    output db_pronto_transmissao,
+    output [6:0] db_estado_medida,
+    output [6:0] db_estado_serial,
 	output dois_segundos
 );
 
     wire [6:0] dados_ascii;
     wire [11:0] s_medida;
     wire [23:0] saida_rom;
-    wire [2:0] seletor;
-    wire [2:0] posicao_angulo;
+    wire [1:0] seletor;
+	wire fim_dois_segundos;
     
 	assign medida = s_medida;
 
@@ -69,10 +60,10 @@ module exp5_fd #(
     controle_servo_8 controle_servo (
         .clock(clock),
         .reset(reset),
-        .posicao(posicao_angulo),
+        .posicao(posicao),
         .controle(pwm), // pwm ligado no servomotor
         .db_controle(db_pwm), // pwm gerado pra depuração
-        .db_posicao(db_posicao)
+        .db_posicao(dp_posicao)
     );
 
      mux_8x1_n #(
@@ -91,7 +82,7 @@ module exp5_fd #(
     );
 
     rom_angulos_8x24 rom (
-        .endereco(posicao_angulo), 
+        .endereco(endereco_rom), 
         .saida(saida_rom)
     );
   
@@ -101,7 +92,7 @@ module exp5_fd #(
     ) contador_ascii (
         .clock   (clock     ),
         .zera_as (1'b0      ),
-        .zera_s  (zera_contador_ascii ),
+        .zera_s  (zera ),
         .conta   (conta_ascii),
         .Q       (seletor), 
         .fim     (fim_serial),  
@@ -114,24 +105,24 @@ module exp5_fd #(
     ) contador_angulos (
         .clock   (clock     ),
         .zera_as (1'b0      ),
-        .zera_s  (reset_circuito ),
+        .zera_s  (zera ),
         .conta   (conta_angulo),
-        .Q       (posicao_angulo), 
-        .fim     (),  
+        .Q       (posicao), 
+        .fim     (fim_posicao),  
         .meio    (      )
     );
 
 	   
     contador_m #(   // timer de 2 segundos
-        .M (TIME), 
+        .M (100_000_000), 
         .N (27)
     ) contador_segundo (
         .clock   (clock     ),
         .zera_as (1'b0      ),
-        .zera_s  (reset_circuito ),
+        .zera_s  (zera ),
         .conta   (1'b1),
         .Q       (), 
-        .fim     (dois_segundos),  
+        .fim     (fim_dois_segundos),  
         .meio    (      )
     );
 
@@ -141,11 +132,22 @@ module exp5_fd #(
     ) contador_timeout_echo (
         .clock   (clock     ),
         .zera_as (1'b0      ),
-        .zera_s  (zera_timeout_echo ),
+        .zera_s  (zera ),
         .conta   (conta_timeout_echo),
         .Q       (), 
         .fim     (timeout_echo),  
         .meio    (      )
+    );
+	 
+	 
+	registrador_n #(
+        .N(1)
+    ) segundo (
+        .clock  (clock    ),
+        .clear  (zera),
+        .enable (fim_dois_segundos),
+        .D      (fim_dois_segundos),
+        .Q      (dois_segundos)
     );
 	 
 	 
