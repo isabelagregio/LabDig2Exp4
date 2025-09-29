@@ -10,6 +10,7 @@ module exp5_uc (
 		 output           conta_ascii,
 		 output           conta_angulo,
 		 output           zera_timeout_echo,
+         output           zera_contador_ascii,
          output           reset_circuito,
 		 output           partida_serial,
 		 output           medir,
@@ -55,7 +56,8 @@ module exp5_uc (
     end
 
     // Saídas de controle
-    assign zera_timeout_echo                = (Eatual == envia_trigger_medida) | (Eatual == inicial);
+    assign zera_timeout_echo            = (Eatual == envia_trigger_medida) | (Eatual == inicial);
+    assign zera_contador_ascii          = (Eatual == envia_trigger_medida) | (Eatual == inicial);
     assign reset_circuito               = (Eatual == inicial);
     assign medir                        = (Eatual == envia_trigger_medida);
     assign conta_timeout_echo           = (Eatual == aguarda_medida);

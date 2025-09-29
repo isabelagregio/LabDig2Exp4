@@ -7,6 +7,7 @@ module exp5_fd #(
     input echo,
     input partida_serial,
     input zera_timeout_echo,
+    input zera_contador_ascii,
     input reset_circuito,
     input conta_ascii,
     input conta_angulo,
@@ -94,7 +95,7 @@ module exp5_fd #(
     ) contador_ascii (
         .clock   (clock     ),
         .zera_as (1'b0      ),
-        .zera_s  (reset_circuito ),
+        .zera_s  (zera_contador_ascii ),
         .conta   (conta_ascii),
         .Q       (seletor), 
         .fim     (fim_serial),  
