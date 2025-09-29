@@ -7,6 +7,7 @@ module exp5_fd (
     input zera,
     input conta_ascii,
     input conta_angulo,
+    input conta_timeout_echo,
     output fim_serial,
     output trigger,
     output saida_serial,
@@ -14,6 +15,7 @@ module exp5_fd (
     output pronto_transmissao,
     output [11:0] medida,
     output pwm,
+    output timeout_echo,
     output fim_posicao,
     output [2:0] dp_posicao,
     output db_pwm,
@@ -72,9 +74,9 @@ module exp5_fd (
         .D5({3'b000, s_medida[7:4]} + 7'h30),   
         .D4({3'b000, s_medida[11:8]} + 7'h30),
         .D3(7'h2C),
-        .D2(saida_rom[7:0]   [6:0]),  // descarte do bit mais significativo
-        .D1(saida_rom[15:8]  [6:0]),
-        .D0(saida_rom[23:16] [6:0]),
+        .D2(saida_rom[6:0]),  // descarte do bit mais significativo
+        .D1(saida_rom[14:8]),
+        .D0(saida_rom[22:16]),
         .SEL(seletor),
         .MUX_OUT(dados_ascii)
     );
@@ -113,7 +115,7 @@ module exp5_fd (
 	   
     contador_m #(   // timer de 2 segundos
         .M (100_000_000), 
-        .N (26)
+        .N (27)
     ) contador_segundo (
         .clock   (clock     ),
         .zera_as (1'b0      ),
@@ -121,6 +123,19 @@ module exp5_fd (
         .conta   (1'b1),
         .Q       (), 
         .fim     (fim_dois_segundos),  
+        .meio    (      )
+    );
+
+    contador_m #(   // timer de 200 milisegundos
+        .M (10_000_000), 
+        .N (24)
+    ) contador_timeout_echo (
+        .clock   (clock     ),
+        .zera_as (1'b0      ),
+        .zera_s  (zera ),
+        .conta   (conta_timeout_echo),
+        .Q       (), 
+        .fim     (timeout_echo),  
         .meio    (      )
     );
 	 
