@@ -69,7 +69,7 @@ module exp5_tb;
 
 
         // Loop pelos casos de teste
-        for (caso = 1; caso < 5; caso = caso + 1) begin
+        for (caso = 1; caso < 8; caso = caso + 1) begin
             // 1) Determina a largura do pulso echo
             $display("Caso de teste %0d: %0dus", caso, casos_teste[caso-1]);
             larguraPulso = casos_teste[caso-1]*1000; // 1us=1000

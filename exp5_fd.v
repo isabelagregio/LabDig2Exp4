@@ -29,7 +29,7 @@ module exp5_fd #(
     wire [6:0] dados_ascii;
     wire [11:0] s_medida;
     wire [23:0] saida_rom;
-    wire [1:0] seletor;
+    wire [2:0] seletor;
     wire [2:0] posicao_angulo;
     
 	assign medida = s_medida;
